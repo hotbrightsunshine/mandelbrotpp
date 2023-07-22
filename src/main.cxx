@@ -5,8 +5,8 @@
 #include <tuple>
 #include <fstream>
 
-#define HEIGHT 500
-#define WIDTH 500
+#define HEIGHT 1000
+#define WIDTH 1000
 
 struct record {
     std::complex<double> z;
