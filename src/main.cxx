@@ -1,9 +1,14 @@
 #include <iostream>
 #include <complex>
-#include <SDL2/SDL.h>
 #include <cmath>
-#include <tuple>
-#include <fstream>
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_keyboard.h>
+#include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_scancode.h>
+
+#include "../libs/mandelbrot.hxx"
 
 #define HEIGHT 1000
 #define WIDTH 1000
@@ -12,20 +17,6 @@ struct record {
     std::complex<double> z;
     unsigned int iters;
 };
-
-unsigned int is_in_set(std::complex<double> c, unsigned int iterations, double threshold) {
-    
-    std::complex<double> z(0, 0);
-
-    for(int re = 0; re < iterations; ++re) {
-        z = z*z + c;
-        if (std::norm(z) > threshold) {
-            return re;
-        }
-    }
-
-    return 0;
-}
 
 int main() {
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -51,7 +42,7 @@ int main() {
                 actual_x, actual_y
             );
 
-            grid[x][y].iters = is_in_set(grid[x][y].z, 50, 10);
+            grid[x][y].iters = mdl::is_in_set(grid[x][y].z, 50, 10);
 
             if (grid[x][y].iters == 0) {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 1);
