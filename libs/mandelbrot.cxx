@@ -1,6 +1,8 @@
 #include <complex>
 #include <cmath>
 #include <vector>
+#include <iostream>
+#include <format>
 
 #include "mandelbrot.hxx"
 
@@ -39,21 +41,18 @@ unsigned int is_in_set(C c, unsigned int iterations, double threshold) {
 }
 
 Record2DArray get_map(unsigned int height, unsigned int width, C min, C max ) {
-    Record2DArray map = Record2DArray(height);
-    for (std::vector<record> row : map) {
-        row = std::vector<record>(width);
-    }
+    Record2DArray map = Record2DArray(height, std::vector<record>(width, record()));
+
+    C c_dimension = C(
+        std::abs(min.real()) + std::abs(max.real()),
+        std::abs(min.imag()) + std::abs(min.imag())
+    );
 
     for(unsigned int y = 0; y < height; y++) {
         for(unsigned int x = 0; x < width; x++) {
 
-            C c_dimension = C(
-                std::abs(min.real()) + std::abs(max.real()),
-                std::abs(min.imag()) + std::abs(min.imag())
-            );
-
-            double x_percentage = double(width) - (c_dimension.real() / 2) / double(width);
-            double y_percentage = double(height) - (c_dimension.imag() / 2) / double(height);
+            double x_percentage = (double(x) - (c_dimension.real() / 2) ) / double(width);
+            double y_percentage = (double(y) - (c_dimension.imag() / 2)) / double(height);
 
             double re = std::lerp(min.real(), max.real(), x_percentage);
             double im = std::lerp(min.imag(), max.imag(), y_percentage);

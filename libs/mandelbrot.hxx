@@ -1,7 +1,8 @@
 #include <complex>
 #include <cmath>
 #include <vector>
-
+#include <string>
+#include <format>
 
 class record {
     public:

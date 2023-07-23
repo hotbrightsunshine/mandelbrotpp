@@ -10,10 +10,13 @@
 
 #include "../libs/mandelbrot.hxx"
 
-#define HEIGHT 1000
-#define WIDTH 1000
+const unsigned int HEIGHT = 1000;
+const unsigned int WIDTH = 1000;
+const unsigned int ITERATIONS = 20;
+const unsigned int THRESHOLD = 10;
 
 int main() {
+
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
@@ -26,7 +29,8 @@ int main() {
 
     for (int x = 0; x < HEIGHT; x++) { // rows
         for (int y = 0; y < WIDTH; y++) { //columns
-            grid[x][y].iters = is_in_set(grid[x][y].z, 50, 10);
+
+            grid[x][y].iters = is_in_set(grid[x][y].z, ITERATIONS, THRESHOLD);
 
             if (grid[x][y].iters == 0) {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 1);
