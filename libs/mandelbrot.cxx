@@ -35,23 +35,24 @@ unsigned int is_in_set(C c, unsigned int iterations, double threshold) {
     return 0;
 }
 
+double coord(double w, double a, double c, double x) {
+    return a + (c - a) * (2 * x - (std::abs(a) + std::abs(c))) / (2 * w); 
+}
+
+C get_complex_coord(unsigned int height, unsigned int width, C min, C max, unsigned int x, unsigned int y) {
+    double real = coord(double(width), min.real(), max.real(), x);
+    double imag = coord(double(height), min.imag(), max.imag(), y);
+    return C(real, imag);
+}
+
 Record2DArray get_map(unsigned int height, unsigned int width, C min, C max, unsigned int iterations, unsigned int threshold) {
     Record2DArray map = Record2DArray(height, std::vector<record>(width, record()));
 
-    C c_dimension = C(
-        std::abs(min.real()) + std::abs(max.real()),
-        std::abs(min.imag()) + std::abs(min.imag())
-    );
-
     for(unsigned int y = 0; y < height; y++) {
         for(unsigned int x = 0; x < width; x++) {
-            double x_percentage = (double(x) - (c_dimension.real() / 2) ) / double(width);
-            double y_percentage = (double(y) - (c_dimension.imag() / 2) ) / double(height);
+            C z = get_complex_coord(height, width, min, max, x, y);
 
-            double re = std::lerp(min.real(), max.real(), x_percentage);
-            double im = std::lerp(min.imag(), max.imag(), y_percentage);
-
-            map[x][y] = record(C(re, im));
+            map[x][y] = record(z);
 
             unsigned int iters = is_in_set(map[x][y].z, iterations, threshold);
             map[x][y].iters = iters;
@@ -62,28 +63,24 @@ Record2DArray get_map(unsigned int height, unsigned int width, C min, C max, uns
 }
 
 void update_map(Record2DArray& grid, C min, C max, unsigned int iterations, unsigned int threshold) {
-    C c_dimension = C(
-        std::abs(min.real()) + std::abs(max.real()),
-        std::abs(min.imag()) + std::abs(min.imag())
-    );
-
     int width = grid.size();
     int height = grid[0].size();
 
+    unsigned long int _iterations = 0;
+
     for(unsigned int y = 0; y < width; y++) {
         for(unsigned int x = 0; x < height; x++) {
-            double x_percentage = (double(x) - (c_dimension.real() / 2) ) / double(width);
-            double y_percentage = (double(y) - (c_dimension.imag() / 2) ) / double(height);
 
-            double re = std::lerp(min.real(), max.real(), x_percentage);
-            double im = std::lerp(min.imag(), max.imag(), y_percentage);
+            C z = get_complex_coord(height, width, min, max, x, y);
 
-            grid[x][y] = record(C(re, im));
+            grid[x][y] = record(z);
 
             unsigned int iters = is_in_set(grid[x][y].z, iterations, threshold);
             grid[x][y].iters = iters;
+            _iterations++;
         }
     }
+    std::cout << "Iterations in calculation: " << _iterations << std::endl;
 }
 
 void clear_map(Record2DArray& map) {
@@ -97,6 +94,7 @@ void clear_map(Record2DArray& map) {
 
 void paint(unsigned int height, unsigned int width, SDL_Renderer* renderer, Record2DArray& grid) {
     SDL_RenderClear(renderer);
+    unsigned long int _iterations = 0;
     for (int x = 0; x < height; x++) { // rows
         for (int y = 0; y < width; y++) { //columns
 
@@ -109,10 +107,12 @@ void paint(unsigned int height, unsigned int width, SDL_Renderer* renderer, Reco
             }
 
             SDL_RenderDrawPoint(renderer, x, y);
+            _iterations ++;
         }
     }
 
     SDL_RenderPresent(renderer);
+    std::cout << "Iterations in paint: " << _iterations << std::endl;
 }
 
 void zoom(double coefficient, C& min, C& max) {

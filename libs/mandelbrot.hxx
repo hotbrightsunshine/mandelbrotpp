@@ -34,3 +34,6 @@ void zoom(double coefficient, C& min, C& max);
 void translate(direction d, double coefficient, C&min, C&max);
 void update_map(Record2DArray& grid, C min, C max, unsigned int iterations, unsigned int threshold);
 void clear_map(Record2DArray& map);
+double coord(double w, double a, double c, double x);
+C get_complex_coord(unsigned int height, unsigned int width, C min, C max, unsigned int x, unsigned int y);
+

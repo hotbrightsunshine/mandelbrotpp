@@ -1,6 +1,8 @@
 #include <iostream>
 #include <complex>
 #include <cmath>
+#include <thread>
+#include <chrono>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
@@ -9,6 +11,8 @@
 #include <SDL2/SDL_scancode.h>
 
 #include "../libs/mandelbrot.hxx"
+
+using namespace std::chrono_literals;
 
 const unsigned int HEIGHT = 800;
 const unsigned int WIDTH = HEIGHT;
@@ -66,9 +70,10 @@ int main() {
                     default:
                         break;
                 };
-                
+                std::cout << vmin << vmax << std::endl;
                 update_map(grid, vmin, vmax, ITERATIONS, THRESHOLD);
                 paint(HEIGHT, WIDTH, renderer, grid);
+                std::this_thread::sleep_for(2ms);
             }
         }
     }
