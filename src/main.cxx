@@ -13,14 +13,16 @@
 const unsigned int HEIGHT = 800;
 const unsigned int WIDTH = HEIGHT;
 const unsigned int ITERATIONS = 50;
-const unsigned int THRESHOLD = 20;
+const double THRESHOLD = 20;
 const double ZOOMIN = 0.8;
 const double ZOOMOUT = 1.2;
 
-C vmin = (-2, -2);
-C vmax = (2, 2);
+C vmin = C(-2, -2);
+C vmax = C(2, 2);
 
 int main() {
+
+    std::cout << vmin << vmax << std::endl;
 
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window* window = nullptr;
@@ -34,8 +36,6 @@ int main() {
 
     paint(HEIGHT, WIDTH, renderer, grid);
     
-    SDL_RenderPresent(renderer);
-    
     SDL_Event e;
     bool quit = false;
     while (!quit) {
@@ -46,23 +46,23 @@ int main() {
                 switch (e.key.keysym.sym) {
                     case SDLK_o:
                         zoom(ZOOMOUT, vmin, vmax);
+                        std::cout << "Redraw OUT: " << vmin << vmax << std::endl;
                         break;
                     case SDLK_i:
                         zoom(ZOOMIN, vmin, vmax);
+                        std::cout << "Redraw IN" << vmin << vmax << std::endl;
                         break;
                     default:
                         break;
-                }
-
-                grid = get_map(HEIGHT, WIDTH, vmin, vmax, ITERATIONS, THRESHOLD);
+                };
+                
+                update_map(grid, vmin, vmax, ITERATIONS, THRESHOLD);
                 paint(HEIGHT, WIDTH, renderer, grid);
             }
         }
     }
 
-    grid.clear();
-    grid.shrink_to_fit();
-
+    clear_map(grid);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
