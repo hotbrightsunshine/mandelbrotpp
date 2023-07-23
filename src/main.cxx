@@ -22,21 +22,10 @@ int main() {
     SDL_SetWindowTitle(window, "Mandelbrot visualizer");
     SDL_SetWindowMaximumSize(window, WIDTH, HEIGHT);
 
-    record** grid = new record*[HEIGHT];
-    for (int i = 0; i < HEIGHT; ++i) {
-        grid[i] = new record[WIDTH];
-    }
+    Record2DArray grid = get_map(HEIGHT, WIDTH, C(-2, -2), C(2, 2));
 
     for (int x = 0; x < HEIGHT; x++) { // rows
         for (int y = 0; y < WIDTH; y++) { //columns
-
-            double actual_x = (x / double(WIDTH/2)) - 1.5;
-            double actual_y = (y / double(HEIGHT/2)) - 1;
-
-            grid[x][y].z = std::complex<double>(
-                actual_x, actual_y
-            );
-
             grid[x][y].iters = is_in_set(grid[x][y].z, 50, 10);
 
             if (grid[x][y].iters == 0) {
@@ -62,10 +51,8 @@ int main() {
         }
     }
 
-    for (int i = 0; i < HEIGHT; ++i) {
-        delete[] grid[i];
-    }
-    delete[] grid;
+    grid.clear();
+    grid.shrink_to_fit();
 
 
     SDL_DestroyRenderer(renderer);
