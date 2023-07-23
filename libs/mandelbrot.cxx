@@ -83,6 +83,37 @@ void update_map(Record2DArray& grid, C min, C max, unsigned int iterations, unsi
     std::cout << "Iterations in calculation: " << _iterations << std::endl;
 }
 
+void update_map_and_paint(
+    Record2DArray& grid, 
+    C min, C max, 
+    unsigned int iterations, 
+    unsigned int threshold, 
+    unsigned int height, 
+    unsigned int width, 
+    SDL_Renderer* renderer) {
+        for(unsigned int y = 0; y < width; y++) {
+        for(unsigned int x = 0; x < height; x++) {
+
+            C z = get_complex_coord(height, width, min, max, x, y);
+
+            grid[x][y] = record(z);
+
+            unsigned int iters = is_in_set(grid[x][y].z, iterations, threshold);
+            grid[x][y].iters = iters;
+            
+            if (grid[x][y].iters == 0) {
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 1);
+            } else {
+                SDL_SetRenderDrawColor(renderer, 
+                    std::lerp(255, 0, 1/double(grid[x][y].iters)), 
+                255, 0, 1);
+            }
+
+            SDL_RenderDrawPoint(renderer, x, y);
+        }
+    }
+}
+
 void clear_map(Record2DArray& map) {
     for (unsigned int i = 0; i < map.size(); i ++) {
         map[i].clear();

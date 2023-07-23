@@ -37,3 +37,11 @@ void clear_map(Record2DArray& map);
 double coord(double w, double a, double c, double x);
 C get_complex_coord(unsigned int height, unsigned int width, C min, C max, unsigned int x, unsigned int y);
 
+void update_map_and_paint(
+    Record2DArray& grid, 
+    C min, C max, 
+    unsigned int iterations, 
+    unsigned int threshold, 
+    unsigned int height, 
+    unsigned int width, 
+    SDL_Renderer* renderer);

@@ -71,8 +71,7 @@ int main() {
                         break;
                 };
                 std::cout << vmin << vmax << std::endl;
-                update_map(grid, vmin, vmax, ITERATIONS, THRESHOLD);
-                paint(HEIGHT, WIDTH, renderer, grid);
+                update_map_and_paint(grid, vmin, vmax, ITERATIONS, THRESHOLD, HEIGHT, WIDTH, renderer);
                 std::this_thread::sleep_for(2ms);
             }
         }
