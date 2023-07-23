@@ -112,6 +112,7 @@ void update_map_and_paint(
             SDL_RenderDrawPoint(renderer, x, y);
         }
     }
+    SDL_RenderPresent(renderer);
 }
 
 void clear_map(Record2DArray& map) {
