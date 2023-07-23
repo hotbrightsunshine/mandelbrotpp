@@ -121,3 +121,29 @@ void zoom(double coefficient, C& min, C& max) {
     max.real(max.real() * coefficient);
     max.imag(max.imag() * coefficient);
 }
+
+void translate(direction d, double coefficient, C& min, C& max) {
+    double deltaX = (max.real() - min.real()) * coefficient;
+    double deltaY = (max.imag() - min.imag()) * coefficient;
+
+    switch (d) {
+        case direction::DOWN:
+            min.imag(min.imag() + deltaY);
+            max.imag(max.imag() + deltaY);
+            break;
+        case direction::UP:
+            min.imag(min.imag() - deltaY);
+            max.imag(max.imag() - deltaY);
+            break;
+        case direction::RIGHT:
+            min.real(min.real() + deltaX);
+            max.real(max.real() + deltaX);
+            break;
+        case direction::LEFT:
+            min.real(min.real() - deltaX);
+            max.real(max.real() - deltaX);
+            break;
+        default:
+            break;
+    }
+}
