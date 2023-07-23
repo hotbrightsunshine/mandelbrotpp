@@ -1,6 +1,10 @@
 #include <complex>
 #include <cmath>
 
-namespace mdl {
-    unsigned int is_in_set(std::complex<double> c, unsigned int iterations, double threshold);
-}   
+
+unsigned int is_in_set(std::complex<double> c, unsigned int iterations, double threshold);
+
+struct record {
+    std::complex<double> z;
+    unsigned int iters;
+};

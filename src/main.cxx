@@ -13,11 +13,6 @@
 #define HEIGHT 1000
 #define WIDTH 1000
 
-struct record {
-    std::complex<double> z;
-    unsigned int iters;
-};
-
 int main() {
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window* window = nullptr;
@@ -42,7 +37,7 @@ int main() {
                 actual_x, actual_y
             );
 
-            grid[x][y].iters = mdl::is_in_set(grid[x][y].z, 50, 10);
+            grid[x][y].iters = is_in_set(grid[x][y].z, 50, 10);
 
             if (grid[x][y].iters == 0) {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 1);
