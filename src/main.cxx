@@ -10,10 +10,15 @@
 
 #include "../libs/mandelbrot.hxx"
 
-const unsigned int HEIGHT = 1000;
-const unsigned int WIDTH = 1000;
-const unsigned int ITERATIONS = 20;
-const unsigned int THRESHOLD = 10;
+const unsigned int HEIGHT = 800;
+const unsigned int WIDTH = HEIGHT;
+const unsigned int ITERATIONS = 50;
+const unsigned int THRESHOLD = 20;
+const double ZOOMIN = 0.8;
+const double ZOOMOUT = 1.2;
+
+C vmin = (-2, -2);
+C vmax = (2, 2);
 
 int main() {
 
@@ -25,24 +30,9 @@ int main() {
     SDL_SetWindowTitle(window, "Mandelbrot visualizer");
     SDL_SetWindowMaximumSize(window, WIDTH, HEIGHT);
 
-    Record2DArray grid = get_map(HEIGHT, WIDTH, C(-2, -2), C(2, 2));
+    Record2DArray grid = get_map(HEIGHT, WIDTH, vmin, vmax, ITERATIONS, THRESHOLD);
 
-    for (int x = 0; x < HEIGHT; x++) { // rows
-        for (int y = 0; y < WIDTH; y++) { //columns
-
-            grid[x][y].iters = is_in_set(grid[x][y].z, ITERATIONS, THRESHOLD);
-
-            if (grid[x][y].iters == 0) {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 1);
-            } else {
-                SDL_SetRenderDrawColor(renderer, 
-                    std::lerp(255, 0, 1/double(grid[x][y].iters)), 
-                0, 0, 1);
-            }
-
-            SDL_RenderDrawPoint(renderer, x, y);
-        }
-    }
+    paint(HEIGHT, WIDTH, renderer, grid);
     
     SDL_RenderPresent(renderer);
     
@@ -52,6 +42,21 @@ int main() {
         while(SDL_PollEvent( &e )) {
             if ( e.type == SDL_QUIT )
                 quit = !quit; 
+            else if (e.type == SDL_KEYDOWN) {
+                switch (e.key.keysym.sym) {
+                    case SDLK_o:
+                        zoom(ZOOMOUT, vmin, vmax);
+                        break;
+                    case SDLK_i:
+                        zoom(ZOOMIN, vmin, vmax);
+                        break;
+                    default:
+                        break;
+                }
+
+                grid = get_map(HEIGHT, WIDTH, vmin, vmax, ITERATIONS, THRESHOLD);
+                paint(HEIGHT, WIDTH, renderer, grid);
+            }
         }
     }
 
