@@ -41,7 +41,10 @@ $z_{\text{min}} = a +bi$ and $z_{\text{out}} = c+di$ are the points in which is 
 The distance between the two points, hence the size of the complex set to be calculated, is expressed by:
 
 $$
-d_{\mathbb{R}} = |a| + |c| \\
+d_{\mathbb{R}} = |a| + |c| 
+$$
+
+$$
 d_{\mathbb{C}} = (|b| + |d|)i
 $$
 
