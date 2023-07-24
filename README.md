@@ -72,6 +72,7 @@ $$
 
     \text{Re } c = a + c\bigg[\frac{x - \frac{|a| + |c|}{2}}{w}\bigg] - a\bigg[\frac{x - \frac{|a| + |c|}{2}}{w}\bigg]
 $$
+
 $$
     = a + \frac{c}{w}\bigg(x - \frac{|a| + |c|}{2}\bigg) - \frac{a}{w}\bigg(x - \frac{|a| + |c|}{2}\bigg)
 $$
