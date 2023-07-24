@@ -62,14 +62,15 @@ the associated complex number is
 
 $$
     c = \text{Re } \text{lerp}(a, c, x_p) + \text{Im } \text{lerp}(b, d, y_p).
-    \\
+$$
+
+$$
     c = \text{Re } [a + x_p(c - a)] + \text{Im } [b + y_p(d -b)]
 $$
 
 The following are the calculations done for the real part of the number. Accordingly, variables can be substited to obtain the formula for the imaginary part as well. 
 
 $$
-
     \text{Re } c = a + c\bigg[\frac{x - \frac{|a| + |c|}{2}}{w}\bigg] - a\bigg[\frac{x - \frac{|a| + |c|}{2}}{w}\bigg]
 $$
 
