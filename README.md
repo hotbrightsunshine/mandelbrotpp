@@ -1,6 +1,6 @@
 # 🪄 Mandelbrotpp 
 
-Mandelbrotpp is an interactive Mandelbrot set visualizer written in C++23. 
+Mandelbrotpp is an interactive Mandelbrot set visualizer written in C++. 
 It is still extremely inefficient and needs to be optimized, but I am working to get it usable. 
 Working with a really small section of the complex plane is really intensive, because more CPU cores are involved
 when dealing with really small doubles. 
