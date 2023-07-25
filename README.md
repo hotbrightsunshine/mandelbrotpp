@@ -89,6 +89,16 @@ $$
     = a + \frac{c-a}{2w}\bigg[ 2x - (|a| + |c|) \bigg]
 $$
 
+## Next improvements
+
+To improve the performance and the overall usability of Mandelbrotpp, I have decided to:
+-  [ ] **Create a configuration file** to customize the global variales of my program. Values such as `HEIGHT` or `THRESHOLD` need to be changed by the user. 
+-  [ ] Support for **rectangular resolutions** different from 1x1 resolutions. 
+-  [ ] Create a **caching system** that is able to memorize already memorized pixels, in order to render only the ones that the program didn't render. E.g.: when translating the complex plane (i.e. moving with directional arrows), pixels are always re-rendered. This is wrong, because $[-2 -2i, 2 + 2i] \cap [-2.1 -2i, 2.1 + 2i]$ is a really big set of numbers that should be memorized by the program. 
+-  [ ] Introduce **GPU calculation**.
+-  [ ] Enable **multi-threading** calculations to fasten up the overall process. 
+-  [ ] Scale the window for big resolutions, so that almost invisible pixels are not included in the calculations. 
+
 ## Preview
 
 This is a preview video of the first v1-alpha version of Mandelbrotpp. 
