@@ -7,6 +7,10 @@
 
 namespace mandel {
 
+class MandelbrotDisplay {
+    // TODO: in another file
+};
+
 class Cell {
     public:
         std::complex<double> z;
