@@ -22,12 +22,12 @@ const double ZOOMIN = 0.8;
 const double ZOOMOUT = 1.2;
 const double TRANSLCOEFF = 0.2;
 
-C vmin = C(-2, -2);
-C vmax = C(2, 2);
+mandel::C vmin = mandel::C(-2, -2);
+mandel::C vmax = mandel::C(2, 2);
 
 int main() {
 
-    std::cout << vmin << vmax << std::endl;
+    std::cout << vmin << vmax << std::endl; 
 
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window* window = nullptr;
@@ -37,9 +37,9 @@ int main() {
     SDL_SetWindowTitle(window, "Mandelbrot visualizer");
     SDL_SetWindowMaximumSize(window, WIDTH, HEIGHT);
 
-    Record2DArray grid = get_map(HEIGHT, WIDTH, vmin, vmax, ITERATIONS, THRESHOLD);
+    mandel::Record2DArray grid = mandel::get_map(HEIGHT, WIDTH, vmin, vmax, ITERATIONS, THRESHOLD);
 
-    paint(HEIGHT, WIDTH, renderer, grid);
+    mandel::paint(HEIGHT, WIDTH, renderer, grid);
     
     SDL_Event e;
     bool quit = false;
@@ -50,34 +50,34 @@ int main() {
             else if (e.type == SDL_KEYDOWN) {
                 switch (e.key.keysym.sym) {
                     case SDLK_o:
-                        zoom(ZOOMOUT, vmin, vmax);
+                        mandel::zoom(ZOOMOUT, vmin, vmax);
                         break;
                     case SDLK_i:
-                        zoom(ZOOMIN, vmin, vmax);
+                        mandel::zoom(ZOOMIN, vmin, vmax);
                         break;
                     case SDLK_UP:
-                        translate(direction::UP, TRANSLCOEFF, vmin, vmax);
+                        mandel::translate(mandel::Direction::UP, TRANSLCOEFF, vmin, vmax);
                         break;
                     case SDLK_DOWN:
-                        translate(direction::DOWN, TRANSLCOEFF, vmin, vmax);
+                        mandel::translate(mandel::Direction::DOWN, TRANSLCOEFF, vmin, vmax);
                         break;
                     case SDLK_RIGHT:
-                        translate(direction::RIGHT, TRANSLCOEFF, vmin, vmax);
+                        mandel::translate(mandel::Direction::RIGHT, TRANSLCOEFF, vmin, vmax);
                         break;
                     case SDLK_LEFT:
-                        translate(direction::LEFT, TRANSLCOEFF, vmin, vmax);
+                        mandel::translate(mandel::Direction::LEFT, TRANSLCOEFF, vmin, vmax);
                         break;
                     default:
                         break;
                 };
                 std::cout << vmin << vmax << std::endl;
-                update_map_and_paint(grid, vmin, vmax, ITERATIONS, THRESHOLD, HEIGHT, WIDTH, renderer);
+                mandel::update_map_and_paint(grid, vmin, vmax, ITERATIONS, THRESHOLD, HEIGHT, WIDTH, renderer);
                 std::this_thread::sleep_for(2ms);
             }
         }
     }
 
-    clear_map(grid);
+    mandel::clear_map(grid);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

@@ -7,22 +7,22 @@
 
 #include "mandelbrot.hxx"
 
-record::record(std::complex<double> z, unsigned int iters) {
+mandel::Cell::Cell(std::complex<double> z, unsigned int iters) {
     this->z = z;
     this->iters = iters;
 };
 
-record::record(std::complex<double> z) {
+mandel::Cell::Cell(std::complex<double> z) {
     this->z = z;
     this->iters = 0;
 };
 
-record::record() {
+mandel::Cell::Cell() {
     this->z = C(0, 0);
     this->iters = 0;
 };
 
-unsigned int is_in_set(C c, unsigned int iterations, double threshold) {
+unsigned int mandel::is_in_set(C c, unsigned int iterations, double threshold) {
     C z(0, 0);
 
     for(int re = 0; re < iterations; ++re) {
@@ -35,24 +35,24 @@ unsigned int is_in_set(C c, unsigned int iterations, double threshold) {
     return 0;
 }
 
-double coord(double w, double a, double c, double x) {
+double mandel::coord(double w, double a, double c, double x) {
     return a + (c - a) * (2 * x - (std::abs(a) + std::abs(c))) / (2 * w); 
 }
 
-C get_complex_coord(unsigned int height, unsigned int width, C min, C max, unsigned int x, unsigned int y) {
+mandel::C mandel::get_complex_coord(unsigned int height, unsigned int width, C min, C max, unsigned int x, unsigned int y) {
     double real = coord(double(width), min.real(), max.real(), x);
     double imag = coord(double(height), min.imag(), max.imag(), y);
     return C(real, imag);
 }
 
-Record2DArray get_map(unsigned int height, unsigned int width, C min, C max, unsigned int iterations, unsigned int threshold) {
-    Record2DArray map = Record2DArray(height, std::vector<record>(width, record()));
+mandel::Record2DArray mandel::get_map(unsigned int height, unsigned int width, C min, C max, unsigned int iterations, unsigned int threshold) {
+    Record2DArray map = Record2DArray(height, std::vector<Cell>(width, Cell()));
 
     for(unsigned int y = 0; y < height; y++) {
         for(unsigned int x = 0; x < width; x++) {
-            C z = get_complex_coord(height, width, min, max, x, y);
+            C z = mandel::get_complex_coord(height, width, min, max, x, y);
 
-            map[x][y] = record(z);
+            map[x][y] = Cell(z);
 
             unsigned int iters = is_in_set(map[x][y].z, iterations, threshold);
             map[x][y].iters = iters;
@@ -62,7 +62,7 @@ Record2DArray get_map(unsigned int height, unsigned int width, C min, C max, uns
     return map;
 }
 
-void update_map(Record2DArray& grid, C min, C max, unsigned int iterations, unsigned int threshold) {
+void mandel::update_map(Record2DArray& grid, C min, C max, unsigned int iterations, unsigned int threshold) {
     int width = grid.size();
     int height = grid[0].size();
 
@@ -73,7 +73,7 @@ void update_map(Record2DArray& grid, C min, C max, unsigned int iterations, unsi
 
             C z = get_complex_coord(height, width, min, max, x, y);
 
-            grid[x][y] = record(z);
+            grid[x][y] = Cell(z);
 
             unsigned int iters = is_in_set(grid[x][y].z, iterations, threshold);
             grid[x][y].iters = iters;
@@ -83,7 +83,7 @@ void update_map(Record2DArray& grid, C min, C max, unsigned int iterations, unsi
     std::cout << "Iterations in calculation: " << _iterations << std::endl;
 }
 
-void update_map_and_paint(
+void mandel::update_map_and_paint(
     Record2DArray& grid, 
     C min, C max, 
     unsigned int iterations, 
@@ -96,7 +96,7 @@ void update_map_and_paint(
 
             C z = get_complex_coord(height, width, min, max, x, y);
 
-            grid[x][y] = record(z);
+            grid[x][y] = Cell(z);
 
             unsigned int iters = is_in_set(grid[x][y].z, iterations, threshold);
             grid[x][y].iters = iters;
@@ -115,7 +115,7 @@ void update_map_and_paint(
     SDL_RenderPresent(renderer);
 }
 
-void clear_map(Record2DArray& map) {
+void mandel::clear_map(Record2DArray& map) {
     for (unsigned int i = 0; i < map.size(); i ++) {
         map[i].clear();
         map[i].shrink_to_fit();
@@ -124,7 +124,7 @@ void clear_map(Record2DArray& map) {
     map.shrink_to_fit();
 }
 
-void paint(unsigned int height, unsigned int width, SDL_Renderer* renderer, Record2DArray& grid) {
+void mandel::paint(unsigned int height, unsigned int width, SDL_Renderer* renderer, Record2DArray& grid) {
     SDL_RenderClear(renderer);
     unsigned long int _iterations = 0;
     for (int x = 0; x < height; x++) { // rows
@@ -147,31 +147,31 @@ void paint(unsigned int height, unsigned int width, SDL_Renderer* renderer, Reco
     std::cout << "Iterations in paint: " << _iterations << std::endl;
 }
 
-void zoom(double coefficient, C& min, C& max) {
+void mandel::zoom(double coefficient, C& min, C& max) {
     min.real(min.real() * coefficient);
     min.imag(min.imag() * coefficient);
     max.real(max.real() * coefficient);
     max.imag(max.imag() * coefficient);
 }
 
-void translate(direction d, double coefficient, C& min, C& max) {
+void mandel::translate(Direction d, double coefficient, C& min, C& max) {
     double deltaX = (max.real() - min.real()) * coefficient;
     double deltaY = (max.imag() - min.imag()) * coefficient;
 
     switch (d) {
-        case direction::DOWN:
+        case Direction::DOWN:
             min.imag(min.imag() + deltaY);
             max.imag(max.imag() + deltaY);
             break;
-        case direction::UP:
+        case Direction::UP:
             min.imag(min.imag() - deltaY);
             max.imag(max.imag() - deltaY);
             break;
-        case direction::RIGHT:
+        case Direction::RIGHT:
             min.real(min.real() + deltaX);
             max.real(max.real() + deltaX);
             break;
-        case direction::LEFT:
+        case Direction::LEFT:
             min.real(min.real() - deltaX);
             max.real(max.real() - deltaX);
             break;
