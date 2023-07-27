@@ -1,0 +1,1 @@
+add_library(mandelbrot STATIC "mandelbrot.cxx" "mandelbrot.hxx")

@@ -3,3 +3,5 @@ out
 *.a
 *.o
 *.so
+_build
+_builds
