@@ -7,13 +7,15 @@
 
 namespace mandel {
 
+// Synonyms
+typedef std::complex<double> C;
+
 const unsigned int DEFAULT_ITERATIONS = 25;
 const unsigned int DEFAULT_THRESHOLD = 25;
 const unsigned int DEFAULT_WIDTH = 500;
 const unsigned int DEFAULT_HEIGHT = 500;
-
-// Synonyms
-typedef std::complex<double> C;
+const C DEFAULT_RENDER_MIN = C(-2, -2);
+const C DEFAULT_RENDER_MAX = C(2, 2);
 
 enum Direction {
     UP,
@@ -30,10 +32,10 @@ enum Sense {
 struct DisplayCoordinate {
     unsigned int x;
     unsigned int y;
-}
-
+};
 
 // Methods
+/*
 Record2DArray get_map(unsigned int height, unsigned int width, C min, C max, unsigned int iterations, unsigned int threshold);
 void paint(unsigned int height, unsigned int width, SDL_Renderer* renderer, Record2DArray& grid);
 void zoom(double coefficient, C& min, C& max);
@@ -51,5 +53,7 @@ void update_map_and_paint(
     unsigned int height, 
     unsigned int width, 
     SDL_Renderer* renderer);
+
+*/
 
 }

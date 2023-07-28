@@ -1,8 +1,9 @@
+#include <SDL2/SDL.h>
+#include <vector>
+
 #include "mandelbrot.hxx"
 
 namespace mandel {
-
-    typedef std::vector<std::vector<Cell>> Record2DArray;
 
     struct Color {
         unsigned int r;
@@ -12,7 +13,7 @@ namespace mandel {
 
     class MandelbrotDisplay {
         private:
-            Record2DArray _pixels;
+            std::vector<Cell> _pixels;
             unsigned int _height;
             unsigned int _width;
             unsigned int _iterations;
@@ -24,6 +25,8 @@ namespace mandel {
             C _renderMax;
             double _zoomCoefficient;
             double _translationCoefficient;
+            SDL_Renderer* _SDLRenderer;
+            SDL_Window* _SDLWindow; 
 
             void paint();
 
@@ -44,6 +47,7 @@ namespace mandel {
             void zoom(Sense d);
             void translate(Direction d);
             void clean();
+            void initialize();
     };
 
     class Cell {
