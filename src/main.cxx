@@ -16,8 +16,8 @@ using namespace std::chrono_literals;
 
 const unsigned int HEIGHT = 800;
 const unsigned int WIDTH = HEIGHT;
-const unsigned int ITERATIONS = 50;
-const double THRESHOLD = 20;
+const unsigned int ITERATIONS = 25;
+const double THRESHOLD = 5;
 const double ZOOMIN = 0.8;
 const double ZOOMOUT = 1.2;
 const double TRANSLCOEFF = 0.2;
@@ -71,7 +71,12 @@ int main() {
                         break;
                 };
                 std::cout << vmin << vmax << std::endl;
+                auto start = std::chrono::high_resolution_clock::now();
                 update_map_and_paint(grid, vmin, vmax, ITERATIONS, THRESHOLD, HEIGHT, WIDTH, renderer);
+                auto stop = std::chrono::high_resolution_clock::now();
+                auto duration= std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+                std::cout << "Elapsed: ";
+                std::cout << duration.count() << std::endl;
                 std::this_thread::sleep_for(2ms);
             }
         }
