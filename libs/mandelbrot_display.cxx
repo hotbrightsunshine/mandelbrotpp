@@ -3,19 +3,7 @@
 
 namespace mandel {
 
-    struct MandelbrotConfiguration {
-        // TODO
-    }
-
-    const Color DEFAULT_MANDELBROT_COLOR_OUT = Color { 0xFF, 0, 0 };
-    const Color DEFAULT_MANDELBROT_COLOR_FILL = Color { 0, 0, 0 };
-    const Color DEFAULT_MANDELBROT_COLOR_BACKGROUND = Color { 0, 0, 0};
-    const double DEFAULT_ZOOMIN_COEFFICIENT = 0.8;
-    const double DEFAULT_ZOOMOUT_COEFFICIENT = 1.2;
-    const double DEFAULT_TRANSLATION_COEFFICIENT = 0.2;
-
-
-    MandelbrotDisplay::MandelbrotDisplay() {
+    MandelbrotConfiguration::MandelbrotConfiguration() {
         this->_height = DEFAULT_HEIGHT;
         this->_width = DEFAULT_WIDTH;
         this->_iterations = DEFAULT_ITERATIONS;
@@ -27,25 +15,16 @@ namespace mandel {
         this->_mandelbrotBackground = DEFAULT_MANDELBROT_COLOR_BACKGROUND;
     }
 
-    MandelbrotDisplay::MandelbrotDisplay(
-        unsigned int height,
-        // unsigned int width, #TODO Not supported yet
-        unsigned int iterations,
-        unsigned int threshold,
-        Color mandelbrotFill,
-        Color mandelbrotOut,
-        Color mandelbrotBackground,
-        C renderMin,
-        C renderMax
-    ) {
-        this->_height = height;
-        this->_width = height; // Not supported yet
-        this->_iterations = iterations;
-        this->_threshold = threshold;
-        this->_mandelbrotOut = mandelbrotOut;
-        this->_mandelbrotFill = mandelbrotFill;
-        this->_mandelbrotBackground = mandelbrotBackground;
-        this->_renderMin = renderMin;
-        this->_renderMax = renderMax;
+    MandelbrotDisplay::MandelbrotDisplay(MandelbrotConfiguration config) {
+        this->_config = config;
+    }
+
+    MandelbrotDisplay::MandelbrotDisplay() {
+        this->_config = MandelbrotConfiguration();
+    }
+
+    void MandelbrotDisplay::initialize() {
+        this->_pixels = std::vector(
+            this->_config._height * this->_config._width, Cell());
     }
 }

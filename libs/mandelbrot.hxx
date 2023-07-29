@@ -2,7 +2,6 @@
 #include <cmath>
 #include <vector>
 #include <string>
-#include <format>
 #include <SDL2/SDL.h>
 
 namespace mandel {
