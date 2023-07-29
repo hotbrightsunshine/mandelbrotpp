@@ -12,12 +12,12 @@ namespace mandel {
         this->_iters = 0;
     }
 
-    Cell::Cell(DisplayCoordinate i, MandelbrotConfiguration c) {
+    Cell::Cell(DisplayCoordinate i, MandelbrotConfiguration& c) {
         this->_z = Cell::_fromCoordinates(i, c);
         this->_iters = 0;
     }
 
-    C Cell::_fromCoordinates(DisplayCoordinate i, MandelbrotConfiguration c) {
+    C Cell::_fromCoordinates(DisplayCoordinate i, MandelbrotConfiguration& c) {
         double real = Cell::_coordFunction(double(c._width), c._renderMin.real(), c._renderMax.real(), i.x);
         double imag = Cell::_coordFunction(double(c._height), c._renderMin.imag(), c._renderMax.imag(), i.y);
         return C(real, imag);
@@ -35,7 +35,7 @@ namespace mandel {
         return this->_z;
     }
 
-    void Cell::compute(MandelbrotConfiguration c) {
+    void Cell::compute(MandelbrotConfiguration& c) {
         C z(0, 0);
 
         for(int re = 0; re < c._iterations; ++re) {

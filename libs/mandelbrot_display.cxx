@@ -18,7 +18,7 @@ namespace mandel {
         this->_mandelbrotBackground = DEFAULT_MANDELBROT_COLOR_BACKGROUND;
     }
 
-    MandelbrotDisplay::MandelbrotDisplay(MandelbrotConfiguration config) {
+    MandelbrotDisplay::MandelbrotDisplay(MandelbrotConfiguration& config) {
         this->_config = config;
     }
 
@@ -32,9 +32,13 @@ namespace mandel {
 
         for(unsigned int i = 0; i < this->_config._width; i++) {
             for(unsigned int j = 0; j < this->_config._height; j++) {
-                _pixels[this->_config._height * j + i] = Cell(DisplayCoordinate{i,j}, this->_config);
+                Cell* current = &_pixels[this->_config._height * j + i];
+                *current = Cell(DisplayCoordinate{i,j}, this->_config);
+                current->compute(this->_config);
             }
         }   
+
+        (*this)._config;
         
     }
 }

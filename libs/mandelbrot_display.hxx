@@ -44,7 +44,7 @@ namespace mandel {
         public:
             MandelbrotDisplay();
             MandelbrotDisplay(
-                MandelbrotConfiguration mandelbrot
+                MandelbrotConfiguration& mandelbrot
             );
 
             void zoom(Sense d);
