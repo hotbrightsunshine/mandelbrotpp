@@ -6,27 +6,12 @@
 
 #include "mandelbrot.hxx"
 
-mandel::Cell::Cell(std::complex<double> z, unsigned int iters) {
-    this->z = z;
-    this->iters = iters;
-};
-
-mandel::Cell::Cell(std::complex<double> z) {
-    this->z = z;
-    this->iters = 0;
-};
-
-mandel::Cell::Cell() {
-    this->z = C(0, 0);
-    this->iters = 0;
-};
-
 unsigned int mandel::is_in_set(C c, unsigned int iterations, double threshold) {
-    C z(0, 0);
+    C _z(0, 0);
 
     for(int re = 0; re < iterations; ++re) {
-        z = z*z + c;
-        if (std::norm(z) > threshold) {
+        _z = _z*_z + c;
+        if (std::norm(_z) > threshold) {
             return re;
         }
     }
@@ -49,11 +34,11 @@ mandel::Record2DArray mandel::get_map(unsigned int height, unsigned int width, C
 
     for(unsigned int y = 0; y < height; y++) {
         for(unsigned int x = 0; x < width; x++) {
-            C z = mandel::get_complex_coord(height, width, min, max, x, y);
+            C _z = mandel::get_complex_coord(height, width, min, max, x, y);
 
-            map[x][y] = Cell(z);
+            map[x][y] = Cell(_z);
 
-            unsigned int iters = is_in_set(map[x][y].z, iterations, threshold);
+            unsigned int iters = is_in_set(map[x][y]._z, iterations, threshold);
             map[x][y].iters = iters;
         }
     }
@@ -70,11 +55,11 @@ void mandel::update_map(Record2DArray& grid, C min, C max, unsigned int iteratio
     for(unsigned int y = 0; y < width; y++) {
         for(unsigned int x = 0; x < height; x++) {
 
-            C z = get_complex_coord(height, width, min, max, x, y);
+            C _z = get_complex_coord(height, width, min, max, x, y);
 
-            grid[x][y] = Cell(z);
+            grid[x][y] = Cell(_z);
 
-            unsigned int iters = is_in_set(grid[x][y].z, iterations, threshold);
+            unsigned int iters = is_in_set(grid[x][y]._z, iterations, threshold);
             grid[x][y].iters = iters;
             _iterations++;
         }
@@ -93,11 +78,11 @@ void mandel::update_map_and_paint(
         for(unsigned int y = 0; y < width; y++) {
         for(unsigned int x = 0; x < height; x++) {
 
-            C z = get_complex_coord(height, width, min, max, x, y);
+            C _z = get_complex_coord(height, width, min, max, x, y);
 
-            grid[x][y] = Cell(z);
+            grid[x][y] = Cell(_z);
 
-            unsigned int iters = is_in_set(grid[x][y].z, iterations, threshold);
+            unsigned int iters = is_in_set(grid[x][y]._z, iterations, threshold);
             grid[x][y].iters = iters;
             
             if (grid[x][y].iters == 0) {

@@ -1,5 +1,8 @@
+#include <vector>
+
 #include "mandelbrot.hxx"
 #include "mandelbrot_display.hxx"
+#include "mandelbrot_cell.hxx"
 
 namespace mandel {
 
@@ -26,5 +29,12 @@ namespace mandel {
     void MandelbrotDisplay::initialize() {
         this->_pixels = std::vector(
             this->_config._height * this->_config._width, Cell());
+
+        for(unsigned int i = 0; i < this->_config._width; i++) {
+            for(unsigned int j = 0; j < this->_config._height; j++) {
+                _pixels[this->_config._height * j + i] = Cell(DisplayCoordinate{i,j}, this->_config);
+            }
+        }   
+        
     }
 }

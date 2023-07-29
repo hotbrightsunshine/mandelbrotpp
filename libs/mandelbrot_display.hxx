@@ -52,23 +52,4 @@ namespace mandel {
             void clean();
             void initialize();
     };
-
-    class Cell {
-        private: 
-            C z;
-            unsigned int iters;
-            C fromCoordinates(DisplayCoordinate i);
-
-        public:
-            Cell(C z, unsigned int iters);
-            Cell(C z);
-            Cell(DisplayCoordinate i);
-            Cell();
-
-            void compute(); // compute the mandelbrot calculation = is in set
-
-            unsigned int getIters();
-
-    };
-
 }
