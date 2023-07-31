@@ -2,7 +2,6 @@
 #include <cmath>
 #include <vector>
 #include <iostream>
-#include <format>
 #include <SDL2/SDL.h>
 
 #include "mandelbrot.hxx"
