@@ -14,7 +14,14 @@ namespace mandel {
     }
 
     void MandelbrotDisplay::initialize() {
-        /*
+        SDL_Init(SDL_INIT_EVERYTHING);
+        SDL_Window* window = nullptr;
+        SDL_Renderer* renderer = nullptr;
+
+        SDL_CreateWindowAndRenderer(this->_config._width, this->_config._height, 0, &window, &renderer);
+        SDL_SetWindowTitle(window, "Mandelbrot visualizer");
+        SDL_SetWindowMaximumSize(window, this->_config._width, this->_config._height);
+
         this->_pixels = std::vector(
             this->_config._height * this->_config._width, Cell());
 
@@ -26,8 +33,40 @@ namespace mandel {
             }
         }   
 
-        (*this)._config;
-        */
+        this->paint();
+    }
+
+    void MandelbrotDisplay::paint() {
+        Color* pOut = &(this->_config._mandelbrotOut);
+        Color* pBack = &(this->_config._mandelbrotBackground);
+        Color* pFill = &(this->_config._mandelbrotFill);
+        for(unsigned int y=0; y<this->_config._width; ++y) {
+            for (unsigned int x=0; x<this->_config._height; ++x) {
+                Cell* pCell = &(this->_pixels[this->_config._height*y + x]);
+                if(pCell->getIters() == 0) {
+                    SDL_SetRenderDrawColor(this->_SDLRenderer, pFill->r, pFill->g, pFill->b, 255);
+                } else {
+                    SDL_SetRenderDrawColor(this->_SDLRenderer, 
+                        std::lerp(pOut->r, pBack->r, 1/double(pCell->getIters())),
+                        std::lerp(pOut->g, pBack->g, 1/double(pCell->getIters())),
+                        std::lerp(pOut->b, pBack->b, 1/double(pCell->getIters())),
+                        255
+                    );
+                }
+
+                SDL_RenderDrawPoint(this->_SDLRenderer, x, y);
+            }
+        }
+        SDL_RenderPresent(this->_SDLRenderer);
+    }
+
+    void MandelbrotDisplay::clean() {
+        this->_pixels.clear();
+        this->_pixels.shrink_to_fit();
+
+        SDL_DestroyRenderer(this->_SDLRenderer);
+        SDL_DestroyWindow(this->_SDLWindow);
+        SDL_Quit();
     }
 
         Cell::Cell() {

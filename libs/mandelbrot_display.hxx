@@ -8,7 +8,6 @@
 
 namespace mandel {
 
-
     struct Color {
         unsigned int r;
         unsigned int g;
@@ -22,7 +21,7 @@ namespace mandel {
     static constexpr double DEFAULT_ZOOMOUT_COEFFICIENT = 1.2;
     static constexpr double DEFAULT_TRANSLATION_COEFFICIENT = 0.2;
 
-    struct MandelbrotConfiguration {
+    struct MandelbrotConfiguration { //should be stored in the heap
         unsigned int _height = DEFAULT_HEIGHT;
         unsigned int _width = DEFAULT_WIDTH;
         unsigned int _iterations = DEFAULT_ITERATIONS;
@@ -56,11 +55,7 @@ namespace mandel {
 
             unsigned int getIters();
             C getZ();
-
     };
-
-
-
 
     class MandelbrotDisplay {
         private:

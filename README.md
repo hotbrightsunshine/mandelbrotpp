@@ -98,6 +98,7 @@ To improve the performance and the overall usability of Mandelbrotpp, I have dec
 -  [ ] Introduce **GPU calculation**.
 -  [ ] Enable **multi-threading** calculations to fasten up the overall process. 
 -  [ ] Scale the window for big resolutions, so that almost invisible pixels are not included in the calculations. 
+-  [ ] Once the vector is initialized, only its values should change; the vector shall not be initialized once again at every calculation. 
 
 ## Preview
 
