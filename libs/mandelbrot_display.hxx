@@ -38,7 +38,7 @@ namespace mandel {
 
     class Cell {
         private: 
-            C _z;
+            C _c;
             unsigned int _iters;
             /**
              * This method converts SDL's (X;Y) coordinates into the (Re;Im) coordinates of the complex plane 
@@ -61,8 +61,8 @@ namespace mandel {
         private:
             std::vector<Cell> _pixels;
             MandelbrotConfiguration _config;
-            SDL_Renderer* _SDLRenderer;
-            SDL_Window* _SDLWindow; 
+            SDL_Renderer* _SDLRenderer = nullptr;
+            SDL_Window* _SDLWindow = nullptr; 
 
             void paint();
 

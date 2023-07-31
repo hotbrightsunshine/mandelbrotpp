@@ -1,2 +1,2 @@
-add_library(mandelbrot STATIC "mandelbrot.cxx" "mandelbrot.hxx")
-add_library(mandelbrot_display STATIC "mandelbrot_display.hxx" "mandelbrot_display.cxx" )
+add_library(libmandelbrot STATIC "mandelbrot.cxx" "mandelbrot.hxx")
+add_library(libmandelbrot_display STATIC "mandelbrot_display.hxx" "mandelbrot_display.cxx" )

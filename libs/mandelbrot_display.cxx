@@ -15,19 +15,17 @@ namespace mandel {
 
     void MandelbrotDisplay::initialize() {
         SDL_Init(SDL_INIT_EVERYTHING);
-        SDL_Window* window = nullptr;
-        SDL_Renderer* renderer = nullptr;
 
-        SDL_CreateWindowAndRenderer(this->_config._width, this->_config._height, 0, &window, &renderer);
-        SDL_SetWindowTitle(window, "Mandelbrot visualizer");
-        SDL_SetWindowMaximumSize(window, this->_config._width, this->_config._height);
+        SDL_CreateWindowAndRenderer(this->_config._width, this->_config._height, 0, &this->_SDLWindow, &this->_SDLRenderer);
+        SDL_SetWindowTitle(this->_SDLWindow, "Mandelbrot visualizer");
+        SDL_SetWindowMaximumSize(this->_SDLWindow, this->_config._width, this->_config._height);
 
         this->_pixels = std::vector(
             this->_config._height * this->_config._width, Cell());
 
         for(unsigned int i = 0; i < this->_config._width; i++) {
             for(unsigned int j = 0; j < this->_config._height; j++) {
-                Cell* current = &_pixels[this->_config._height * j + i];
+                Cell* current = &_pixels[(this->_config._height * i) + j];
                 *current = Cell(DisplayCoordinate{i,j}, this->_config);
                 current->compute(this->_config);
             }
@@ -46,12 +44,15 @@ namespace mandel {
                 if(pCell->getIters() == 0) {
                     SDL_SetRenderDrawColor(this->_SDLRenderer, pFill->r, pFill->g, pFill->b, 255);
                 } else {
+                    /*
                     SDL_SetRenderDrawColor(this->_SDLRenderer, 
                         std::lerp(pOut->r, pBack->r, 1/double(pCell->getIters())),
                         std::lerp(pOut->g, pBack->g, 1/double(pCell->getIters())),
                         std::lerp(pOut->b, pBack->b, 1/double(pCell->getIters())),
                         255
                     );
+                    */
+                   SDL_SetRenderDrawColor(this->_SDLRenderer, 255, 255, 255, 255);
                 }
 
                 SDL_RenderDrawPoint(this->_SDLRenderer, x, y);
@@ -71,16 +72,16 @@ namespace mandel {
 
         Cell::Cell() {
         this->_iters = 0;
-        this->_z = C(0, 0);
+        this->_c = C(0, 0);
     }
 
     Cell::Cell(C z) {
-        this->_z = z;
+        this->_c = z;
         this->_iters = 0;
     }
 
     Cell::Cell(DisplayCoordinate i, MandelbrotConfiguration& c) {
-        this->_z = Cell::_fromCoordinates(i, c);
+        this->_c = Cell::_fromCoordinates(i, c);
         this->_iters = 0;
     }
 
@@ -99,16 +100,17 @@ namespace mandel {
     }
 
     C Cell::getZ() {
-        return this->_z;
+        return this->_c;
     }
 
-    void Cell::compute(MandelbrotConfiguration& c) {
+    void Cell::compute(MandelbrotConfiguration& config) {
         C z(0, 0);
 
-        for(int re = 0; re < c._iterations; ++re) {
-            z = z*z + this->_z;
-            if (std::norm(_z) > c._threshold) {
-                this->_iters = re;
+        for(unsigned int i = 0; i < config._iterations; i++) {
+            z = z*z + this->_c;
+            double candidate = z.real() * z.real() + z.imag() * z.imag();
+            if (candidate > 4.0) {
+                this->_iters = i;
                 return;
             }
         }
