@@ -16,7 +16,7 @@ namespace mandel {
 
     static constexpr Color DEFAULT_MANDELBROT_COLOR_OUT = Color { 0xFF, 0, 0 };
     static constexpr Color DEFAULT_MANDELBROT_COLOR_FILL = Color { 0, 0, 0 };
-    static constexpr Color DEFAULT_MANDELBROT_COLOR_BACKGROUND = Color { 0, 0, 0};
+    static constexpr Color DEFAULT_MANDELBROT_COLOR_BACKGROUND = Color { 0xAA, 0, 0xFF};
     static constexpr double DEFAULT_ZOOMIN_COEFFICIENT = 0.8;
     static constexpr double DEFAULT_ZOOMOUT_COEFFICIENT = 1.2;
     static constexpr double DEFAULT_TRANSLATION_COEFFICIENT = 0.2;
@@ -57,9 +57,20 @@ namespace mandel {
             C getZ();
     };
 
-    class MandelbrotDisplay {
+    class Grid {
         private:
             std::vector<Cell> _pixels;
+        public:
+            Grid(MandelbrotConfiguration& c);
+            Grid();
+            
+            Cell* getpCell(unsigned int x, unsigned int y, MandelbrotConfiguration& c);
+            void clear();
+    };
+
+    class MandelbrotDisplay {
+        private:
+            Grid _grid;
             MandelbrotConfiguration _config;
             SDL_Renderer* _SDLRenderer = nullptr;
             SDL_Window* _SDLWindow = nullptr; 

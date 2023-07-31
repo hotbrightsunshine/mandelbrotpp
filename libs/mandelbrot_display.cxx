@@ -6,11 +6,13 @@
 
 namespace mandel {
     MandelbrotDisplay::MandelbrotDisplay(MandelbrotConfiguration& config) {
+        this->_grid = Grid(config);
         this->_config = config;
     }
 
     MandelbrotDisplay::MandelbrotDisplay() {
         this->_config = MandelbrotConfiguration();
+        this->_grid = Grid(this->_config);
     }
 
     void MandelbrotDisplay::initialize() {
@@ -20,12 +22,9 @@ namespace mandel {
         SDL_SetWindowTitle(this->_SDLWindow, "Mandelbrot visualizer");
         SDL_SetWindowMaximumSize(this->_SDLWindow, this->_config._width, this->_config._height);
 
-        this->_pixels = std::vector(
-            this->_config._height * this->_config._width, Cell());
-
         for(unsigned int i = 0; i < this->_config._width; i++) {
             for(unsigned int j = 0; j < this->_config._height; j++) {
-                Cell* current = &_pixels[(this->_config._height * i) + j];
+                Cell* current = this->_grid.getpCell(i, j, this->_config);
                 *current = Cell(DisplayCoordinate{i,j}, this->_config);
                 current->compute(this->_config);
             }
@@ -40,19 +39,16 @@ namespace mandel {
         Color* pFill = &(this->_config._mandelbrotFill);
         for(unsigned int y=0; y<this->_config._width; ++y) {
             for (unsigned int x=0; x<this->_config._height; ++x) {
-                Cell* pCell = &(this->_pixels[this->_config._height*y + x]);
+                Cell* pCell = this->_grid.getpCell(x, y, this->_config);
                 if(pCell->getIters() == 0) {
                     SDL_SetRenderDrawColor(this->_SDLRenderer, pFill->r, pFill->g, pFill->b, 255);
                 } else {
-                    /*
                     SDL_SetRenderDrawColor(this->_SDLRenderer, 
                         std::lerp(pOut->r, pBack->r, 1/double(pCell->getIters())),
                         std::lerp(pOut->g, pBack->g, 1/double(pCell->getIters())),
                         std::lerp(pOut->b, pBack->b, 1/double(pCell->getIters())),
                         255
                     );
-                    */
-                   SDL_SetRenderDrawColor(this->_SDLRenderer, 255, 255, 255, 255);
                 }
 
                 SDL_RenderDrawPoint(this->_SDLRenderer, x, y);
@@ -62,8 +58,7 @@ namespace mandel {
     }
 
     void MandelbrotDisplay::clean() {
-        this->_pixels.clear();
-        this->_pixels.shrink_to_fit();
+        this->_grid.clear();
 
         SDL_DestroyRenderer(this->_SDLRenderer);
         SDL_DestroyWindow(this->_SDLWindow);
@@ -117,5 +112,26 @@ namespace mandel {
 
         this->_iters = 0;
         return;
+    }
+
+    Cell* Grid::getpCell(unsigned int x, unsigned int y, MandelbrotConfiguration& c) {
+        return &this->_pixels.at(c._height*y + x);
+    }
+
+    Grid::Grid(MandelbrotConfiguration& c) {
+        this->_pixels = std::vector(
+            c._height * c._width, Cell());
+    }
+
+    Grid::Grid() {
+        MandelbrotConfiguration c = MandelbrotConfiguration();
+        this->_pixels = std::vector(
+            c._height * c._width, Cell()
+        );
+    }
+
+    void Grid::clear() {
+        this->_pixels.clear();
+        this->_pixels.shrink_to_fit();
     }
 }
