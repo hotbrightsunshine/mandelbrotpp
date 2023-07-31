@@ -12,10 +12,10 @@ namespace mandel {
 // Synonyms
 typedef std::complex<double> C;
 
-static constexpr unsigned int DEFAULT_ITERATIONS = 25;
-static constexpr unsigned int DEFAULT_THRESHOLD = 25;
-static constexpr unsigned int DEFAULT_WIDTH = 500;
-static constexpr unsigned int DEFAULT_HEIGHT = 500;
+static constexpr unsigned int DEFAULT_ITERATIONS = 190;
+static constexpr unsigned int DEFAULT_THRESHOLD = 4;
+static constexpr unsigned int DEFAULT_WIDTH = 1000;
+static constexpr unsigned int DEFAULT_HEIGHT = 1000;
 static constexpr C DEFAULT_RENDER_MIN = C(-2, -2);
 static constexpr C DEFAULT_RENDER_MAX = C(2, 2);
 
