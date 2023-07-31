@@ -1,3 +1,6 @@
+#ifndef mandelbrot
+#define mandelbrot
+
 #include <complex>
 #include <cmath>
 #include <vector>
@@ -9,12 +12,12 @@ namespace mandel {
 // Synonyms
 typedef std::complex<double> C;
 
-const unsigned int DEFAULT_ITERATIONS = 25;
-const unsigned int DEFAULT_THRESHOLD = 25;
-const unsigned int DEFAULT_WIDTH = 500;
-const unsigned int DEFAULT_HEIGHT = 500;
-const C DEFAULT_RENDER_MIN = C(-2, -2);
-const C DEFAULT_RENDER_MAX = C(2, 2);
+static constexpr unsigned int DEFAULT_ITERATIONS = 25;
+static constexpr unsigned int DEFAULT_THRESHOLD = 25;
+static constexpr unsigned int DEFAULT_WIDTH = 500;
+static constexpr unsigned int DEFAULT_HEIGHT = 500;
+static constexpr C DEFAULT_RENDER_MIN = C(-2, -2);
+static constexpr C DEFAULT_RENDER_MAX = C(2, 2);
 
 enum Direction {
     UP,
@@ -56,3 +59,5 @@ void update_map_and_paint(
 */
 
 }
+
+#endif

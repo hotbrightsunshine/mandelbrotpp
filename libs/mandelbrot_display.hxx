@@ -1,3 +1,6 @@
+#ifndef mandelbrot_display_hxx
+#define mandelbrot_display_hxx
+
 #include <SDL2/SDL.h>
 #include <vector>
 
@@ -5,32 +8,59 @@
 
 namespace mandel {
 
+
     struct Color {
         unsigned int r;
         unsigned int g;
         unsigned int b;
     };
 
-    const Color DEFAULT_MANDELBROT_COLOR_OUT = Color { 0xFF, 0, 0 };
-    const Color DEFAULT_MANDELBROT_COLOR_FILL = Color { 0, 0, 0 };
-    const Color DEFAULT_MANDELBROT_COLOR_BACKGROUND = Color { 0, 0, 0};
-    const double DEFAULT_ZOOMIN_COEFFICIENT = 0.8;
-    const double DEFAULT_ZOOMOUT_COEFFICIENT = 1.2;
-    const double DEFAULT_TRANSLATION_COEFFICIENT = 0.2;
+    static constexpr Color DEFAULT_MANDELBROT_COLOR_OUT = Color { 0xFF, 0, 0 };
+    static constexpr Color DEFAULT_MANDELBROT_COLOR_FILL = Color { 0, 0, 0 };
+    static constexpr Color DEFAULT_MANDELBROT_COLOR_BACKGROUND = Color { 0, 0, 0};
+    static constexpr double DEFAULT_ZOOMIN_COEFFICIENT = 0.8;
+    static constexpr double DEFAULT_ZOOMOUT_COEFFICIENT = 1.2;
+    static constexpr double DEFAULT_TRANSLATION_COEFFICIENT = 0.2;
 
     struct MandelbrotConfiguration {
-        unsigned int _height;
-        unsigned int _width;
-        unsigned int _iterations;
-        unsigned int _threshold; 
-        Color _mandelbrotFill;
-        Color _mandelbrotOut;
-        Color _mandelbrotBackground;
-        C _renderMin;
-        C _renderMax;
-        double _zoomCoefficient;
-        double _translationCoefficient;
+        unsigned int _height = DEFAULT_HEIGHT;
+        unsigned int _width = DEFAULT_WIDTH;
+        unsigned int _iterations = DEFAULT_ITERATIONS;
+        unsigned int _threshold = DEFAULT_THRESHOLD; 
+        Color _mandelbrotFill = DEFAULT_MANDELBROT_COLOR_FILL;
+        Color _mandelbrotOut = DEFAULT_MANDELBROT_COLOR_OUT;
+        Color _mandelbrotBackground = DEFAULT_MANDELBROT_COLOR_BACKGROUND;
+        C _renderMin = DEFAULT_RENDER_MIN;
+        C _renderMax = DEFAULT_RENDER_MAX;
+        double _zoomInCoefficient = DEFAULT_ZOOMIN_COEFFICIENT;
+        double _zoomOutCoefficient = DEFAULT_ZOOMOUT_COEFFICIENT;
+        double _translationCoefficient = DEFAULT_TRANSLATION_COEFFICIENT;
     };
+
+    class Cell {
+        private: 
+            C _z;
+            unsigned int _iters;
+            /**
+             * This method converts SDL's (X;Y) coordinates into the (Re;Im) coordinates of the complex plane 
+            */
+            static C _fromCoordinates(DisplayCoordinate i, MandelbrotConfiguration& c);
+            static double _coordFunction(double w, double a, double c, double x);
+
+        public:
+            Cell(C z);
+            Cell(DisplayCoordinate i, MandelbrotConfiguration& c);
+            Cell();
+
+            void compute(MandelbrotConfiguration& C); // compute the mandelbrot calculation = is in set
+
+            unsigned int getIters();
+            C getZ();
+
+    };
+
+
+
 
     class MandelbrotDisplay {
         private:
@@ -53,3 +83,5 @@ namespace mandel {
             void initialize();
     };
 }
+
+#endif

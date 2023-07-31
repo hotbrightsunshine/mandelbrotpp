@@ -1,3 +1,4 @@
+/*
 #include <complex>
 #include <cmath>
 #include <vector>
@@ -163,3 +164,4 @@ void mandel::translate(Direction d, double coefficient, C& min, C& max) {
             break;
     }
 }
+*/

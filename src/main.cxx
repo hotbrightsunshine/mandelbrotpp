@@ -12,21 +12,8 @@
 
 #include "../libs/mandelbrot.hxx"
 
-using namespace std::chrono_literals;
-
-const unsigned int HEIGHT = 800;
-const unsigned int WIDTH = HEIGHT;
-const unsigned int ITERATIONS = 50;
-const double THRESHOLD = 20;
-const double ZOOMIN = 0.8;
-const double ZOOMOUT = 1.2;
-const double TRANSLCOEFF = 0.2;
-
-mandel::C vmin = mandel::C(-2, -2);
-mandel::C vmax = mandel::C(2, 2);
-
 int main() {
-
+/*
     std::cout << vmin << vmax << std::endl; 
 
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -83,4 +70,5 @@ int main() {
     SDL_DestroyWindow(window);
     SDL_Quit();
     return 0;
+    */
 }
