@@ -19,6 +19,6 @@ using namespace mandel;
 int main() {
     MandelbrotDisplay d = MandelbrotDisplay();
     d.initialize();
-    std::this_thread::sleep_for(5s);
+    d.startListening();
     d.clean();
 }

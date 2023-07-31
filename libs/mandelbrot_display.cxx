@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 
 #include "mandelbrot.hxx"
 #include "mandelbrot_display.hxx"
@@ -21,14 +22,6 @@ namespace mandel {
         SDL_CreateWindowAndRenderer(this->_config._width, this->_config._height, 0, &this->_SDLWindow, &this->_SDLRenderer);
         SDL_SetWindowTitle(this->_SDLWindow, "Mandelbrot visualizer");
         SDL_SetWindowMaximumSize(this->_SDLWindow, this->_config._width, this->_config._height);
-
-        for(unsigned int i = 0; i < this->_config._width; i++) {
-            for(unsigned int j = 0; j < this->_config._height; j++) {
-                Cell* current = this->_grid.getpCell(i, j, this->_config);
-                *current = Cell(DisplayCoordinate{i,j}, this->_config);
-                current->compute(this->_config);
-            }
-        }   
 
         this->paint();
     }
@@ -55,6 +48,102 @@ namespace mandel {
             }
         }
         SDL_RenderPresent(this->_SDLRenderer);
+    }
+
+    void MandelbrotDisplay::startListening() {
+        SDL_Event e;
+        bool quit = false;
+        while (!quit) {
+            while(SDL_PollEvent( &e )) {
+                if ( e.type == SDL_QUIT )
+                    quit = !quit; 
+                else if (e.type == SDL_KEYDOWN) {
+                    switch (e.key.keysym.sym) {
+                        case SDLK_o:
+                            this->zoom(Sense::OUT);
+                            break;
+                        case SDLK_i:
+                            this->zoom(Sense::IN);
+                            break;
+                        case SDLK_UP:
+                            this->translate(Direction::UP);
+                            break;
+                        case SDLK_DOWN:
+                            this->translate(Direction::DOWN);
+                            break;
+                        case SDLK_RIGHT:
+                            this->translate(Direction::RIGHT);
+                            break;
+                        case SDLK_LEFT:
+                            this->translate(Direction::LEFT);
+                            break;
+                        default:
+                            break;
+                    };
+                    this->_grid.compute(this->_config);
+                    this->paint();
+                }
+            }
+        }
+    }
+
+    void MandelbrotDisplay::zoom(Sense s) {
+        if (s == Sense::IN) {
+            double _zoomCoefficient = this->_config._zoomInCoefficient;
+            C newMin =  C(
+                this->_config._renderMin.real() * _zoomCoefficient,
+                this->_config._renderMin.imag() * _zoomCoefficient
+            );
+            C newMax = C(
+                this->_config._renderMax.real() * _zoomCoefficient,
+                this->_config._renderMax.imag() * _zoomCoefficient
+            );
+            this->_config._renderMin = newMin;
+            this->_config._renderMax = newMax;
+        } else {
+            double _zoomCoefficient = this->_config._zoomOutCoefficient;
+            C newMin =  C(
+                this->_config._renderMin.real() * _zoomCoefficient,
+                this->_config._renderMin.imag() * _zoomCoefficient
+            );
+            C newMax = C(
+                this->_config._renderMax.real() * _zoomCoefficient,
+                this->_config._renderMax.imag() * _zoomCoefficient
+            );
+            this->_config._renderMin = newMin;
+            this->_config._renderMax = newMax;
+        }
+    }
+
+    void MandelbrotDisplay::translate(Direction d) {
+        C* min = &this->_config._renderMin;
+        C* max = &this->_config._renderMax;
+
+        C delta(
+            (min->real() - max->real()) * this->_config._translationCoefficient,
+            (min->real() - max->real()) * this->_config._translationCoefficient
+        );
+
+        switch (d) {
+            case Direction::DOWN:
+                min->imag(min->imag() + delta.imag());
+                max->imag(max->imag() + delta.imag());
+                break;
+            case Direction::UP:
+                min->imag(min->imag() - delta.imag());
+                max->imag(max->imag() - delta.imag());
+                break;
+            case Direction::RIGHT:
+                min->real(min->real() + delta.real());
+                max->real(max->real() + delta.real());
+                break;
+            case Direction::LEFT:
+                min->real(min->real() - delta.real());
+                max->real(max->real() - delta.real());
+                break;
+            default:
+                break;
+        }
     }
 
     void MandelbrotDisplay::clean() {
@@ -121,6 +210,7 @@ namespace mandel {
     Grid::Grid(MandelbrotConfiguration& c) {
         this->_pixels = std::vector(
             c._height * c._width, Cell());
+        this->compute(c);
     }
 
     Grid::Grid() {
@@ -128,6 +218,19 @@ namespace mandel {
         this->_pixels = std::vector(
             c._height * c._width, Cell()
         );
+        this->compute(c);
+    }
+
+    void Grid::compute(MandelbrotConfiguration& config) {
+        for(unsigned int i = 0; i < config._width; i++) {
+            for(unsigned int j = 0; j < config._height; j++) {
+                Cell* current = this->getpCell(i, j, config);
+                *current = Cell(DisplayCoordinate{i,j}, config);
+                current->compute(config);
+            }
+        }   
+        std::cout << "Min: " << config._renderMin << std::endl;
+        std::cout << "Max: " << config._renderMax << std::endl;
     }
 
     void Grid::clear() {

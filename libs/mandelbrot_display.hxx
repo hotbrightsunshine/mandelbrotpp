@@ -1,8 +1,13 @@
 #ifndef mandelbrot_display_hxx
 #define mandelbrot_display_hxx
 
-#include <SDL2/SDL.h>
 #include <vector>
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_keyboard.h>
+#include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_scancode.h>
 
 #include "mandelbrot.hxx"
 
@@ -65,6 +70,7 @@ namespace mandel {
             Grid();
             
             Cell* getpCell(unsigned int x, unsigned int y, MandelbrotConfiguration& c);
+            void compute(MandelbrotConfiguration& c);
             void clear();
     };
 
@@ -87,6 +93,7 @@ namespace mandel {
             void translate(Direction d);
             void clean();
             void initialize();
+            void startListening();
     };
 }
 
