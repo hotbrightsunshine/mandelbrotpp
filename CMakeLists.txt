@@ -8,4 +8,4 @@ message("SDL2 include dirs: ${SDL_LIBRARIES}")
 add_subdirectory(libs)
 
 add_executable(mandelbrotpp "src/main.cxx")
-target_link_libraries(mandelbrotpp mandelbrot SDL2)
+target_link_libraries(mandelbrotpp libmandelbrot libmandelbrot_display SDL2)

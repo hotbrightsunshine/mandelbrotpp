@@ -11,6 +11,7 @@
 #include <SDL2/SDL_scancode.h>
 
 #include "../libs/mandelbrot.hxx"
+#include "../libs/mandelbrot_display.hxx"
 
 using namespace std::chrono_literals;
 
@@ -24,9 +25,15 @@ const double TRANSLCOEFF = 0.2;
 
 mandel::C vmin = mandel::C(-2, -2);
 mandel::C vmax = mandel::C(2, 2);
+using namespace mandel;
 
 int main() {
+    MandelbrotDisplay d = MandelbrotDisplay();
+    d.initialize();
+    std::this_thread::sleep_for(5s);
+    d.clean();
 
+/*
     std::cout << vmin << vmax << std::endl; 
 
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -71,16 +78,7 @@ int main() {
                         break;
                 };
                 std::cout << vmin << vmax << std::endl;
-<<<<<<< HEAD
                 mandel::update_map_and_paint(grid, vmin, vmax, ITERATIONS, THRESHOLD, HEIGHT, WIDTH, renderer);
-=======
-                auto start = std::chrono::high_resolution_clock::now();
-                update_map_and_paint(grid, vmin, vmax, ITERATIONS, THRESHOLD, HEIGHT, WIDTH, renderer);
-                auto stop = std::chrono::high_resolution_clock::now();
-                auto duration= std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
-                std::cout << "Elapsed: ";
-                std::cout << duration.count() << std::endl;
->>>>>>> 70327fb58cbe2ccb9a188f8e873a88da6b6150b4
                 std::this_thread::sleep_for(2ms);
             }
         }
@@ -92,4 +90,5 @@ int main() {
     SDL_DestroyWindow(window);
     SDL_Quit();
     return 0;
+    */
 }
