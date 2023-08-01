@@ -88,31 +88,22 @@ namespace mandel {
     }
 
     void MandelbrotDisplay::zoom(Sense s) {
-        if (s == Sense::IN) {
-            double _zoomCoefficient = this->_config._zoomInCoefficient;
-            C newMin =  C(
-                this->_config._renderMin.real() * _zoomCoefficient,
-                this->_config._renderMin.imag() * _zoomCoefficient
-            );
-            C newMax = C(
-                this->_config._renderMax.real() * _zoomCoefficient,
-                this->_config._renderMax.imag() * _zoomCoefficient
-            );
-            this->_config._renderMin = newMin;
-            this->_config._renderMax = newMax;
-        } else {
-            double _zoomCoefficient = this->_config._zoomOutCoefficient;
-            C newMin =  C(
-                this->_config._renderMin.real() * _zoomCoefficient,
-                this->_config._renderMin.imag() * _zoomCoefficient
-            );
-            C newMax = C(
-                this->_config._renderMax.real() * _zoomCoefficient,
-                this->_config._renderMax.imag() * _zoomCoefficient
-            );
-            this->_config._renderMin = newMin;
-            this->_config._renderMax = newMax;
-        }
+
+        double _zoomCoefficient = 
+            (s == Sense::IN) ? 
+            this->_config._zoomInCoefficient : 
+            this->_config._zoomOutCoefficient;
+
+        C newMin =  C(
+            this->_config._renderMin.real() * _zoomCoefficient,
+            this->_config._renderMin.imag() * _zoomCoefficient
+        );
+        C newMax = C(
+            this->_config._renderMax.real() * _zoomCoefficient,
+            this->_config._renderMax.imag() * _zoomCoefficient
+        );
+        this->_config._renderMin = newMin;
+        this->_config._renderMax = newMax;
     }
 
     void MandelbrotDisplay::translate(Direction d) {
