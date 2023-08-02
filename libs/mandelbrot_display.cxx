@@ -94,11 +94,11 @@ namespace mandel {
             this->_config._zoomInCoefficient : 
             this->_config._zoomOutCoefficient;
 
-        C newMin =  C(
+        Complex newMin =  Complex(
             this->_config._renderMin.real() * _zoomCoefficient,
             this->_config._renderMin.imag() * _zoomCoefficient
         );
-        C newMax = C(
+        Complex newMax = Complex(
             this->_config._renderMax.real() * _zoomCoefficient,
             this->_config._renderMax.imag() * _zoomCoefficient
         );
@@ -107,10 +107,10 @@ namespace mandel {
     }
 
     void MandelbrotDisplay::translate(Direction d) {
-        C* min = &this->_config._renderMin;
-        C* max = &this->_config._renderMax;
+        Complex* min = &this->_config._renderMin;
+        Complex* max = &this->_config._renderMax;
 
-        C delta(
+        Complex delta(
             (min->real() - max->real()) * this->_config._translationCoefficient,
             (min->real() - max->real()) * this->_config._translationCoefficient
         );
@@ -147,10 +147,10 @@ namespace mandel {
 
         Cell::Cell() {
         this->_iters = 0;
-        this->_c = C(0, 0);
+        this->_c = Complex(0, 0);
     }
 
-    Cell::Cell(C z) {
+    Cell::Cell(Complex z) {
         this->_c = z;
         this->_iters = 0;
     }
@@ -160,10 +160,10 @@ namespace mandel {
         this->_iters = 0;
     }
 
-    C Cell::_fromCoordinates(DisplayCoordinate i, MandelbrotConfiguration& c) {
+    Complex Cell::_fromCoordinates(DisplayCoordinate i, MandelbrotConfiguration& c) {
         double real = Cell::_coordFunction(double(c._width), c._renderMin.real(), c._renderMax.real(), i.x);
         double imag = Cell::_coordFunction(double(c._height), c._renderMin.imag(), c._renderMax.imag(), i.y);
-        return C(real, imag);
+        return Complex(real, imag);
     }
 
     double Cell::_coordFunction(double w, double a, double c, double x) {
@@ -174,12 +174,12 @@ namespace mandel {
         return this->_iters;
     }
 
-    C Cell::getZ() {
+    Complex Cell::getZ() {
         return this->_c;
     }
 
     void Cell::compute(MandelbrotConfiguration& config) {
-        C z(0, 0);
+        Complex z(0, 0);
 
         for(unsigned int i = 0; i < config._iterations; i++) {
             z = z*z + this->_c;

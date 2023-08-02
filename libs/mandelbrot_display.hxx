@@ -34,8 +34,8 @@ namespace mandel {
         Color _mandelbrotFill = DEFAULT_MANDELBROT_COLOR_FILL;
         Color _mandelbrotOut = DEFAULT_MANDELBROT_COLOR_OUT;
         Color _mandelbrotBackground = DEFAULT_MANDELBROT_COLOR_BACKGROUND;
-        C _renderMin = DEFAULT_RENDER_MIN;
-        C _renderMax = DEFAULT_RENDER_MAX;
+        Complex _renderMin = DEFAULT_RENDER_MIN;
+        Complex _renderMax = DEFAULT_RENDER_MAX;
         double _zoomInCoefficient = DEFAULT_ZOOMIN_COEFFICIENT;
         double _zoomOutCoefficient = DEFAULT_ZOOMOUT_COEFFICIENT;
         double _translationCoefficient = DEFAULT_TRANSLATION_COEFFICIENT;
@@ -43,28 +43,34 @@ namespace mandel {
 
     class Cell {
         private: 
-            C _c;
+            Complex _c;
             unsigned int _iters;
             /**
              * This method converts SDL's (X;Y) coordinates into the (Re;Im) coordinates of the complex plane 
             */
-            static C _fromCoordinates(DisplayCoordinate i, MandelbrotConfiguration& c);
+            static Complex _fromCoordinates(DisplayCoordinate i, MandelbrotConfiguration& c);
             static double _coordFunction(double w, double a, double c, double x);
 
         public:
-            Cell(C z);
+            Cell(Complex z);
             Cell(DisplayCoordinate i, MandelbrotConfiguration& c);
             Cell();
 
             void compute(MandelbrotConfiguration& C); // compute the mandelbrot calculation = is in set
+            void setC(Complex c) {
+                this->_c = c;
+            };
+
+            
 
             unsigned int getIters();
-            C getZ();
+            Complex getZ();
     };
 
     class Grid {
         private:
             std::vector<Cell> _pixels;
+
         public:
             Grid(MandelbrotConfiguration& c);
             Grid();
