@@ -179,11 +179,11 @@ namespace mandel {
     }
 
     void Cell::setComplex(ComplexNumber c) {
-
+        this->_c = c;
     }
 
     void Cell::setComplex(DisplayCoordinate i, MandelbrotConfiguration& c) {
-
+        this->_c = Cell::_fromCoordinates(i, c);
     }
 
     void Cell::compute(MandelbrotConfiguration& config) {
@@ -224,7 +224,9 @@ namespace mandel {
         for(unsigned int i = 0; i < config._width; i++) {
             for(unsigned int j = 0; j < config._height; j++) {
                 Cell* current = this->getpCell(i, j, config);
-                *current = Cell(DisplayCoordinate{i,j}, config);
+                current->setComplex(
+                    DisplayCoordinate{i,j}, config
+                );
                 current->compute(config);
             }
         }   

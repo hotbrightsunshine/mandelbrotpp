@@ -14,8 +14,8 @@ namespace mandel {
 
     static constexpr unsigned int DEFAULT_ITERATIONS = 190;
     static constexpr unsigned int DEFAULT_THRESHOLD = 4;
-    static constexpr unsigned int DEFAULT_WIDTH = 1000;
-    static constexpr unsigned int DEFAULT_HEIGHT = 1000;
+    static constexpr unsigned int DEFAULT_WIDTH = 500;
+    static constexpr unsigned int DEFAULT_HEIGHT = 500;
     static constexpr ComplexNumber DEFAULT_RENDER_MIN = ComplexNumber(-2, -2);
     static constexpr ComplexNumber DEFAULT_RENDER_MAX = ComplexNumber(2, 2);
 
