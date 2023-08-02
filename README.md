@@ -57,6 +57,7 @@ $$
 The program associates each pixel to a complex number, according to these calculations. 
 
 Given the linear interpolation function 
+
 $$
     \text{lerp}(a, b, t) = a+t(b-a),
 $$
