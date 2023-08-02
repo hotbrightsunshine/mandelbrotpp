@@ -33,13 +33,13 @@ namespace mandel {
         for(unsigned int y=0; y<this->_config._width; ++y) {
             for (unsigned int x=0; x<this->_config._height; ++x) {
                 Cell* pCell = this->_grid.getpCell(x, y, this->_config);
-                if(pCell->getIters() == 0) {
+                if(pCell->iters() == 0) {
                     SDL_SetRenderDrawColor(this->_SDLRenderer, pFill->r, pFill->g, pFill->b, 255);
                 } else {
                     SDL_SetRenderDrawColor(this->_SDLRenderer, 
-                        std::lerp(pOut->r, pBack->r, 1/double(pCell->getIters())),
-                        std::lerp(pOut->g, pBack->g, 1/double(pCell->getIters())),
-                        std::lerp(pOut->b, pBack->b, 1/double(pCell->getIters())),
+                        std::lerp(pOut->r, pBack->r, 1/double(pCell->iters())),
+                        std::lerp(pOut->g, pBack->g, 1/double(pCell->iters())),
+                        std::lerp(pOut->b, pBack->b, 1/double(pCell->iters())),
                         255
                     );
                 }
@@ -94,11 +94,11 @@ namespace mandel {
             this->_config._zoomInCoefficient : 
             this->_config._zoomOutCoefficient;
 
-        Complex newMin =  Complex(
+        ComplexNumber newMin =  ComplexNumber(
             this->_config._renderMin.real() * _zoomCoefficient,
             this->_config._renderMin.imag() * _zoomCoefficient
         );
-        Complex newMax = Complex(
+        ComplexNumber newMax = ComplexNumber(
             this->_config._renderMax.real() * _zoomCoefficient,
             this->_config._renderMax.imag() * _zoomCoefficient
         );
@@ -107,10 +107,10 @@ namespace mandel {
     }
 
     void MandelbrotDisplay::translate(Direction d) {
-        Complex* min = &this->_config._renderMin;
-        Complex* max = &this->_config._renderMax;
+        ComplexNumber* min = &this->_config._renderMin;
+        ComplexNumber* max = &this->_config._renderMax;
 
-        Complex delta(
+        ComplexNumber delta(
             (min->real() - max->real()) * this->_config._translationCoefficient,
             (min->real() - max->real()) * this->_config._translationCoefficient
         );
@@ -145,12 +145,12 @@ namespace mandel {
         SDL_Quit();
     }
 
-        Cell::Cell() {
+    Cell::Cell() {
         this->_iters = 0;
-        this->_c = Complex(0, 0);
+        this->_c = ComplexNumber(0, 0);
     }
 
-    Cell::Cell(Complex z) {
+    Cell::Cell(ComplexNumber z) {
         this->_c = z;
         this->_iters = 0;
     }
@@ -160,26 +160,34 @@ namespace mandel {
         this->_iters = 0;
     }
 
-    Complex Cell::_fromCoordinates(DisplayCoordinate i, MandelbrotConfiguration& c) {
+    ComplexNumber Cell::_fromCoordinates(DisplayCoordinate i, MandelbrotConfiguration& c) {
         double real = Cell::_coordFunction(double(c._width), c._renderMin.real(), c._renderMax.real(), i.x);
         double imag = Cell::_coordFunction(double(c._height), c._renderMin.imag(), c._renderMax.imag(), i.y);
-        return Complex(real, imag);
+        return ComplexNumber(real, imag);
     }
 
     double Cell::_coordFunction(double w, double a, double c, double x) {
         return a + (c - a) * (2 * x - (std::abs(a) + std::abs(c))) / (2 * w); 
     }
 
-    unsigned int Cell::getIters() {
+    unsigned int Cell::iters() {
         return this->_iters;
     }
 
-    Complex Cell::getZ() {
+    ComplexNumber Cell::getComplex() {
         return this->_c;
     }
 
+    void Cell::setComplex(ComplexNumber c) {
+
+    }
+
+    void Cell::setComplex(DisplayCoordinate i, MandelbrotConfiguration& c) {
+
+    }
+
     void Cell::compute(MandelbrotConfiguration& config) {
-        Complex z(0, 0);
+        ComplexNumber z(0, 0);
 
         for(unsigned int i = 0; i < config._iterations; i++) {
             z = z*z + this->_c;
