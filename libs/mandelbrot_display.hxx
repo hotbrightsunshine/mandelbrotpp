@@ -25,6 +25,7 @@ namespace mandel {
     static constexpr double DEFAULT_ZOOMIN_COEFFICIENT = 0.8;
     static constexpr double DEFAULT_ZOOMOUT_COEFFICIENT = 1.2;
     static constexpr double DEFAULT_TRANSLATION_COEFFICIENT = 0.2;
+    static constexpr int DEFAULT_SCALE_FACTOR = 1;
 
     struct MandelbrotConfiguration { //should be stored in the heap
         unsigned int _height = DEFAULT_HEIGHT;
@@ -39,6 +40,7 @@ namespace mandel {
         double _zoomInCoefficient = DEFAULT_ZOOMIN_COEFFICIENT;
         double _zoomOutCoefficient = DEFAULT_ZOOMOUT_COEFFICIENT;
         double _translationCoefficient = DEFAULT_TRANSLATION_COEFFICIENT;
+        int _scaleFactor = DEFAULT_SCALE_FACTOR;
     };
 
     class Cell {
@@ -72,6 +74,7 @@ namespace mandel {
             Grid(MandelbrotConfiguration& c);
             Grid();
             
+            std::vector<Cell*> renderCandidates(MandelbrotConfiguration& c);
             Cell* getpCell(unsigned int x, unsigned int y, MandelbrotConfiguration& c);
             void compute(MandelbrotConfiguration& c);
             void clear();
