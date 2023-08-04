@@ -25,7 +25,7 @@ namespace mandel {
     static constexpr double DEFAULT_ZOOMIN_COEFFICIENT = 0.8;
     static constexpr double DEFAULT_ZOOMOUT_COEFFICIENT = 1.2;
     static constexpr double DEFAULT_TRANSLATION_COEFFICIENT = 0.2;
-    static constexpr int DEFAULT_SCALE_FACTOR = 4;
+    static constexpr int DEFAULT_SCALE_FACTOR = 10;
 
     struct MandelbrotConfiguration { //should be stored in the heap
         unsigned int _height = DEFAULT_HEIGHT;
@@ -60,11 +60,12 @@ namespace mandel {
             Cell();
 
             void compute(MandelbrotConfiguration& C); // compute the mandelbrot calculation = is in set
-            unsigned int iters();
+            unsigned int getIters();
 
             ComplexNumber getComplex();
             void setComplex(ComplexNumber c);
             void setComplex(DisplayCoordinate i, MandelbrotConfiguration& c);
+            void setIters(unsigned int i);
     };
 
     class Grid {

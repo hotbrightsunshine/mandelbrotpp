@@ -37,13 +37,13 @@ namespace mandel {
         for(unsigned int y=0; y< this->_config._width; ++y) {
             for (unsigned int x=0; x< this->_config._height; ++x) {
                 Cell* pCell = this->_grid.getpCell(x, y, this->_config);
-                if(pCell->iters() == 0) {
+                if(pCell->getIters() == 0) {
                     SDL_SetRenderDrawColor(this->_SDLRenderer, pFill->r, pFill->g, pFill->b, 255);
                 } else {
                     SDL_SetRenderDrawColor(this->_SDLRenderer, 
-                        std::lerp(pOut->r, pBack->r, 1/double(pCell->iters())),
-                        std::lerp(pOut->g, pBack->g, 1/double(pCell->iters())),
-                        std::lerp(pOut->b, pBack->b, 1/double(pCell->iters())),
+                        std::lerp(pOut->r, pBack->r, 1/double(pCell->getIters())),
+                        std::lerp(pOut->g, pBack->g, 1/double(pCell->getIters())),
+                        std::lerp(pOut->b, pBack->b, 1/double(pCell->getIters())),
                         255
                     );
                 }
@@ -174,7 +174,7 @@ namespace mandel {
         return a + (c - a) * (2 * x - (std::abs(a) + std::abs(c))) / (2 * w); 
     }
 
-    unsigned int Cell::iters() {
+    unsigned int Cell::getIters() {
         return this->_iters;
     }
 
@@ -188,6 +188,10 @@ namespace mandel {
 
     void Cell::setComplex(DisplayCoordinate i, MandelbrotConfiguration& c) {
         this->_c = Cell::_fromCoordinates(i, c);
+    }
+
+    void Cell::setIters(unsigned int i) {
+        this->_iters = i;
     }
 
     void Cell::compute(MandelbrotConfiguration& config) {
@@ -240,23 +244,28 @@ namespace mandel {
         for(Cell* candidate : candidates) {
             candidate->compute(config);
         }
-
-        std::cout << "Min: " << config._renderMin << std::endl;
-        std::cout << "Max: " << config._renderMax << std::endl;
-        renderCandidates(config);
     }
 
-    std::vector<Cell*> Grid::renderCandidates(MandelbrotConfiguration& c) {
+    inline std::vector<Cell*> Grid::renderCandidates(MandelbrotConfiguration& c) {
         std::vector<Cell*> toRender{};
+        unsigned int iters{0};
         for(unsigned int x = 0; x < c._width; x++) {
             for(unsigned int y = 0; y < c._height; y++) {
                 int remainderx = x%c._scaleFactor;
                 int remaindery = y%c._scaleFactor;
+                Cell* currentCell = this->getpCell(x, y, c);
                 if (remainderx == 0 && remaindery == 0) {
-                    this->getpCell(x, y, c)->setComplex(
+                    currentCell->setComplex(
                         DisplayCoordinate{x, y}, c
                     );
-                    toRender.push_back(this->getpCell(x, y, c));
+                    currentCell->compute(c);
+                    toRender.push_back(currentCell);
+
+                for (unsigned int subX = 0; subX < c._scaleFactor; ++subX) {
+                    for (unsigned int subY = 0; subY < c._scaleFactor; ++subY) {
+                        this->getpCell(x+subX, y+subY, c)->setIters(currentCell->getIters());
+                    }
+                }
                 }
             }
         }
