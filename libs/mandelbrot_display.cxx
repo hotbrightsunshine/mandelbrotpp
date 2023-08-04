@@ -30,14 +30,13 @@ namespace mandel {
         Color* pOut = &(this->_config._mandelbrotOut);
         Color* pBack = &(this->_config._mandelbrotBackground);
         Color* pFill = &(this->_config._mandelbrotFill);
-        std::vector<Cell*> renderable = this->_grid.renderCandidates(this->_config);
-        int width = this->_config._width / this->_config._scaleFactor;
-        int height = this->_config._height / this->_config._scaleFactor;
-        SDL_RenderSetLogicalSize(this->_SDLRenderer, width, height);
+        //std::vector<Cell*> renderable = this->_grid.renderCandidates(this->_config);
+        //int width = this->_config._width / this->_config._scaleFactor;
+        //int height = this->_config._height / this->_config._scaleFactor;
 
-        for(unsigned int y=0; y<width; ++y) {
-            for (unsigned int x=0; x<height; ++x) {
-                Cell* pCell = this->_grid.getpCell(x*this->_config._scaleFactor, y*this->_config._scaleFactor, this->_config);
+        for(unsigned int y=0; y< this->_config._width; ++y) {
+            for (unsigned int x=0; x< this->_config._height; ++x) {
+                Cell* pCell = this->_grid.getpCell(x, y, this->_config);
                 if(pCell->iters() == 0) {
                     SDL_SetRenderDrawColor(this->_SDLRenderer, pFill->r, pFill->g, pFill->b, 255);
                 } else {
@@ -227,10 +226,8 @@ namespace mandel {
 
     void Grid::compute(MandelbrotConfiguration& config) {
         std::vector<Cell*> candidates = renderCandidates(config);
-        for(Cell* c : candidates) {
-            c->compute(config);
-        }
-        for(unsigned int i = 0; i < config._width; i++) {
+
+/*      for(unsigned int i = 0; i < config._width; i++) {
             for(unsigned int j = 0; j < config._height; j++) {
                 Cell* current = this->getpCell(i, j, config);
                 current->setComplex(
@@ -238,7 +235,12 @@ namespace mandel {
                 );
                 current->compute(config);
             }
-        }   
+        }   */
+
+        for(Cell* candidate : candidates) {
+            candidate->compute(config);
+        }
+
         std::cout << "Min: " << config._renderMin << std::endl;
         std::cout << "Max: " << config._renderMax << std::endl;
         renderCandidates(config);
@@ -246,11 +248,14 @@ namespace mandel {
 
     std::vector<Cell*> Grid::renderCandidates(MandelbrotConfiguration& c) {
         std::vector<Cell*> toRender{};
-        for(int x = 0; x < c._width; x++) {
-            for(int y = 0; y < c._height; y++) {
+        for(unsigned int x = 0; x < c._width; x++) {
+            for(unsigned int y = 0; y < c._height; y++) {
                 int remainderx = x%c._scaleFactor;
                 int remaindery = y%c._scaleFactor;
                 if (remainderx == 0 && remaindery == 0) {
+                    this->getpCell(x, y, c)->setComplex(
+                        DisplayCoordinate{x, y}, c
+                    );
                     toRender.push_back(this->getpCell(x, y, c));
                 }
             }

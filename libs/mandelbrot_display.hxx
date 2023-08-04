@@ -25,7 +25,7 @@ namespace mandel {
     static constexpr double DEFAULT_ZOOMIN_COEFFICIENT = 0.8;
     static constexpr double DEFAULT_ZOOMOUT_COEFFICIENT = 1.2;
     static constexpr double DEFAULT_TRANSLATION_COEFFICIENT = 0.2;
-    static constexpr int DEFAULT_SCALE_FACTOR = 1;
+    static constexpr int DEFAULT_SCALE_FACTOR = 4;
 
     struct MandelbrotConfiguration { //should be stored in the heap
         unsigned int _height = DEFAULT_HEIGHT;
@@ -47,6 +47,7 @@ namespace mandel {
         private: 
             ComplexNumber _c;
             unsigned int _iters;
+
             /**
              * This method converts SDL's (X;Y) coordinates into the (Re;Im) coordinates of the complex plane 
             */
