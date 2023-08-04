@@ -99,6 +99,7 @@ To improve the performance and the overall usability of Mandelbrotpp, I have dec
 -  [ ] Introduce **GPU calculation**.
 -  [ ] Enable **multi-threading** calculations to fasten up the overall process. 
 -  [ ] Scale the window for big resolutions, so that almost invisible pixels are not included in the calculations. 
+-  [ ] Once implemented the Scale functionality, the program may start rendering the Mandelbrot set with a low resolution, so that panning and zooming are less expensive. Inspiration: [Reddit](https://www.reddit.com/r/math/comments/15h4lmt/broken_mandelbrot_set_looks_awesome_would_this/). 
 -  [x] Once the vector is initialized, only its values should change; the vector shall not be initialized once again at every calculation. 
 
 ## Preview
